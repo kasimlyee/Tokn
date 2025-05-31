@@ -22,7 +22,7 @@
     "test:coverage": "jest --coverage"
   },
   "bin": {
-    "jwt-auth": "./lib/cli.js"
+    "jwt-tokn": "./lib/cli.js"
   },
   "keywords": [
     "jwt",
@@ -33,6 +33,10 @@
   "author": "Kasim Lyee <kasiimlyee@gmail.com>",
   "license": "MIT",
   "description": "A lightweight JWT authentication, middleware for Node.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kasiimlyee/jwt-tokn.git"
+  },
   "dependencies": {
     "child_process": "^1.0.2",
     "commander": "^14.0.0",

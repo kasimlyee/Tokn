@@ -1,8 +1,8 @@
 # JWT Authentication Library (jwt-tokn)
 
-[![npm version](https://img.shields.io/npm/v/jwt-auth-library.svg?style=flat-square)](https://www.npmjs.com/package/jwt-auth-library)
+[![npm version](https://img.shields.io/npm/v/jwt-tokn.svg?style=flat-square)](https://www.npmjs.com/package/jwt-tokn)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
-[![Build Status](https://img.shields.io/github/actions/workflow/status/kasimlyee/jwt-auth-library/ci.yml?style=flat-square)](https://github.com/kasimlyee/jwt-auth-library/actions)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/kasimlyee/jwt-tokn/ci.yml?style=flat-square)](https://github.com/kasimlyee/jwt-tokn/actions)
 
 A secure and robust JWT authentication library for Node.js applications with built-in security best practices.
 
@@ -30,48 +30,48 @@ yarn add jwt-tokn
 ### Basic Usage
 
 ```javascript
-const { JWTAuth } = require('jwt-tokn');
+const { JWTAuth } = require("jwt-tokn");
 
 // Initialize with HS256 algorithm
 const jwtAuth = new JWTAuth({
-  secret: 'your-secure-secret-key',
-  algorithm: 'HS256',
-  accessTokenExpiry: '15m',
-  refreshTokenExpiry: '7d'
+  secret: "your-secure-secret-key",
+  algorithm: "HS256",
+  accessTokenExpiry: "15m",
+  refreshTokenExpiry: "7d",
 });
 
 // Generate tokens
-const payload = { userId: '123', roles: ['user'] };
+const payload = { userId: "123", roles: ["user"] };
 const accessToken = jwtAuth.generateAccessToken(payload);
 const refreshToken = jwtAuth.generateRefreshToken(payload);
 
 // Verify token
 try {
   const verified = jwtAuth.verifyToken(accessToken);
-  console.log('Verified payload:', verified);
+  console.log("Verified payload:", verified);
 } catch (err) {
-  console.error('Verification failed:', err.message);
+  console.error("Verification failed:", err.message);
 }
 ```
 
 ### Express Middleware
 
 ```javascript
-const express = require('express');
-const { createAuthMiddleware, createRoleMiddleware } = require('jwt-tokn');
+const express = require("express");
+const { createAuthMiddleware, createRoleMiddleware } = require("jwt-tokn");
 
 const app = express();
 const authMiddleware = createAuthMiddleware(jwtAuth);
-const adminMiddleware = createRoleMiddleware('admin');
+const adminMiddleware = createRoleMiddleware("admin");
 
 // Protected route
-app.get('/profile', authMiddleware, (req, res) => {
+app.get("/profile", authMiddleware, (req, res) => {
   res.json({ user: req.user });
 });
 
 // Admin-only route
-app.get('/admin', authMiddleware, adminMiddleware, (req, res) => {
-  res.json({ message: 'Admin dashboard' });
+app.get("/admin", authMiddleware, adminMiddleware, (req, res) => {
+  res.json({ message: "Admin dashboard" });
 });
 ```
 
@@ -79,17 +79,17 @@ app.get('/admin', authMiddleware, adminMiddleware, (req, res) => {
 
 ### JWTAuth Constructor
 
-| Option             | Type     | Default               | Description |
-|--------------------|----------|-----------------------|-------------|
-| `algorithm`        | string   | `'HS256'`             | Algorithm to use (HS256, RS256, ES256) |
-| `secret`           | string   | -                     | Required for HS* algorithms |
-| `privateKey`       | string   | -                     | Required for RS*/ES* algorithms |
-| `publicKey`        | string   | -                     | Required for RS*/ES* verification |
-| `accessTokenExpiry`| string   | `'15m'`               | Access token expiration (e.g., '15m', '1h') |
-| `refreshTokenExpiry`| string  | `'7d'`                | Refresh token expiration |
-| `issuer`           | string   | `'jwt-auth-tokn'`  | Token issuer |
-| `audience`         | string   | `'example.com'`       | Token audience |
-| `tokenStorage`     | object   | `{ storage: 'memory' }`| Storage configuration |
+| Option               | Type   | Default                 | Description                                 |
+| -------------------- | ------ | ----------------------- | ------------------------------------------- |
+| `algorithm`          | string | `'HS256'`               | Algorithm to use (HS256, RS256, ES256)      |
+| `secret`             | string | -                       | Required for HS\* algorithms                |
+| `privateKey`         | string | -                       | Required for RS*/ES* algorithms             |
+| `publicKey`          | string | -                       | Required for RS*/ES* verification           |
+| `accessTokenExpiry`  | string | `'15m'`                 | Access token expiration (e.g., '15m', '1h') |
+| `refreshTokenExpiry` | string | `'7d'`                  | Refresh token expiration                    |
+| `issuer`             | string | `'jwt-auth-tokn'`       | Token issuer                                |
+| `audience`           | string | `'example.com'`         | Token audience                              |
+| `tokenStorage`       | object | `{ storage: 'memory' }` | Storage configuration                       |
 
 ## CLI Tool
 
@@ -126,7 +126,7 @@ npx jwt-tokn hash-password -p "your-password"
 The library throws specific error types you can catch:
 
 ```javascript
-const { JWTError, TokenExpiredError, InvalidTokenError } = require('jwt-tokn');
+const { JWTError, TokenExpiredError, InvalidTokenError } = require("jwt-tokn");
 
 try {
   jwtAuth.verifyToken(token);
@@ -146,14 +146,14 @@ try {
 ### Using RS256 Algorithm
 
 ```javascript
-const fs = require('fs');
-const { JWTAuth } = require('jwt-tokn');
+const fs = require("fs");
+const { JWTAuth } = require("jwt-tokn");
 
 const jwtAuth = new JWTAuth({
-  algorithm: 'RS256',
-  privateKey: fs.readFileSync('./private.key'),
-  publicKey: fs.readFileSync('./public.key'),
-  accessTokenExpiry: '1h'
+  algorithm: "RS256",
+  privateKey: fs.readFileSync("./private.key"),
+  publicKey: fs.readFileSync("./public.key"),
+  accessTokenExpiry: "1h",
 });
 ```
 
@@ -162,20 +162,20 @@ const jwtAuth = new JWTAuth({
 ```javascript
 async function refreshAccessToken(refreshToken) {
   if (!jwtAuth.isRefreshTokenValid(refreshToken)) {
-    throw new Error('Invalid refresh token');
+    throw new Error("Invalid refresh token");
   }
 
   const payload = jwtAuth.verifyToken(refreshToken);
   const newAccessToken = jwtAuth.generateAccessToken(payload);
   const newRefreshToken = jwtAuth.rotateRefreshToken(refreshToken, payload);
-  
+
   return { newAccessToken, newRefreshToken };
 }
 ```
 
 ## Support
 
-For issues and feature requests, please [open an issue](https://github.com/Tokn/issues).
+For issues and feature requests, please [open an issue](https://github.com/jwt-tokn/issues).
 
 ## License
 
